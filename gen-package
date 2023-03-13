@@ -67,6 +67,7 @@ fpm -s dir -t deb -p "$NAME"-"$VERSION"-any."$TYPE" \
 	--architecture all \
 	--depends gnome-shell-extensions \
   --depends gnome-tweaks \
+  --depends sassc \
 	--description "$DESC" \
 	--url "$URL" \
 	--maintainer "$MAINTAINER" \
