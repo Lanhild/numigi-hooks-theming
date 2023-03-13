@@ -39,7 +39,7 @@ echo '-----------------------------'
 # Download GTK and shell theme
 echo 'Downloading GTK and shell theme...'
 wget https://github.com/vinceliuice/Graphite-gtk-theme/archive/main.zip -O Graphite-gtk-theme-main.zip
-unzip Graphite-gtk-theme-master.zip
+unzip Graphite-gtk-theme-main.zip
 cd Graphite-gtk-theme-main
 ./install.sh -t blue
 echo '-----------------------------'
