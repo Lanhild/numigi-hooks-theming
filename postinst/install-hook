@@ -17,7 +17,7 @@ chmod +r ~/.local/share/gnome-shell/extensions/$uuid/*
 
 # Copy schema to gsettings
 echo 'Copying schema to gsettings...'
-cp -R "~/.local/share/gnome-shell/extensions/$uuid/schemas/org.gnome.shell.extensions.user-theme.gschema.xml" -d /usr/share/glib-2.0/schemas/
+cp -R "/tmp/user-themegnome-shell-extensions.gcampax.github.com.v49.shell-extension/schemas/org.gnome.shell.extensions.user-theme.gschema.xml" -d /usr/share/glib-2.0/schemas/
 glib-compile-schemas /usr/share/glib-2.0/schemas/
 
 # Enable user-theme extension
