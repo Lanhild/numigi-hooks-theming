@@ -1,18 +1,33 @@
-#!/bin/bash 
-# Fetch the source from the upstream repo and download it on the user machine 
+#!/bin/bash
 set -euo pipefail IFS=$'\n\t' 
 # Change to temporary directory 
 cd $(mktemp -d) 
 
+##################
+### Extensions ###
+##################
 # Download user-theme extension
 echo 'Downloading user-theme extension...'
 wget https://extensions.gnome.org/extension-data/user-themegnome-shell-extensions.gcampax.github.com.v49.shell-extension.zip
 uuid=$(unzip -c user-themegnome-shell-extensions.gcampax.github.com.v49.shell-extension.zip metadata.json | grep uuid | cut -d \" -f4)
-unzip user-themegnome-shell-extensions.gcampax.github.com.v49.shell-extension.zip -d "~/.local/share/gnome-shell/extensions/$uuid"
-gnome-extensions enable "$uuid"
-echo 'Make sure to restart your session in order to apply the changes.'
+mkdir -p ~/.local/share/gnome-shell/extensions
+unzip -o user-themegnome-shell-extensions.gcampax.github.com.v49.shell-extension.zip -d /tmp/user-themegnome-shell-extensions.gcampax.github.com.v49.shell-extension
+cp -R "/tmp/user-themegnome-shell-extensions.gcampax.github.com.v49.shell-extension/" -d ~/.local/share/gnome-shell/extensions/$uuid
+chmod +r ~/.local/share/gnome-shell/extensions/$uuid/*
+
+# Copy schema to gsettings
+echo 'Copying schema to gsettings...'
+cp -R "~/.local/share/gnome-shell/extensions/$uuid/schemas/org.gnome.shell.extensions.user-theme.gschema.xml" -d /usr/share/glib-2.0/schemas/
+glib-compile-schemas /usr/share/glib-2.0/schemas/
+
+# Enable user-theme extension
+echo 'Enabling user-theme extension...'
+gsettings set org.gnome.shell enabled-extensions "['$uuid']"
 echo '-----------------------------'
 
+##############
+### Themes ###
+##############
 # Download icon theme
 echo 'Downloading icon theme...'
 wget https://github.com/vinceliuice/Fluent-icon-theme/archive/master.zip -O Fluent-icon-theme-master.zip
@@ -21,9 +36,25 @@ cd Fluent-icon-theme-master
 ./install.sh -n "Fluent-dark"
 echo '-----------------------------'
 
-# Apply icon theme
+# Download GTK and shell theme
+echo 'Downloading GTK and shell theme...'
+wget https://github.com/vinceliuice/Graphite-gtk-theme/archive/main.zip -O Graphite-gtk-theme-main.zip
+unzip Graphite-gtk-theme-master.zip
+cd Graphite-gtk-theme-main
+./install.sh -t blue
+echo '-----------------------------'
+
+# Apply Graphite Blue GTK and shell theme
+echo 'Applying GTK and shell theme...'
+gsettings set org.gnome.desktop.interface gtk-theme "Graphite-blue"
+gsettings set org.gnome.shell.extensions.user-theme name "Graphite-blue"
+echo '-----------------------------'
+
+# Apply Fluent icon theme
 echo 'Applying icon theme...'
 gsettings set org.gnome.desktop.interface icon-theme "Fluent-dark"
+echo '-----------------------------'
 
-# Update entries
-sudo apt update
+echo '####################'
+echo 'Make sure to restart your session in order to apply the changes.'
+echo '####################'
