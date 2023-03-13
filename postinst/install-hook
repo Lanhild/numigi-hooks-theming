@@ -9,7 +9,7 @@ cd $(mktemp -d)
 # Download user-theme extension
 echo 'Downloading user-theme extension...'
 wget https://extensions.gnome.org/extension-data/user-themegnome-shell-extensions.gcampax.github.com.v49.shell-extension.zip
-uuid=$(unzip -c user-themegnome-shell-extensions.gcampax.github.com.v49.shell-extension.zip metadata.json | grep uuid | cut -d \" -f4)
+uuid="user-themegnome-shell-extensions.gcampax.github.com.v49.shell-extension"
 mkdir -p ~/.local/share/gnome-shell/extensions
 unzip -o user-themegnome-shell-extensions.gcampax.github.com.v49.shell-extension.zip -d /tmp/user-themegnome-shell-extensions.gcampax.github.com.v49.shell-extension
 cp -R "/tmp/user-themegnome-shell-extensions.gcampax.github.com.v49.shell-extension/" -d ~/.local/share/gnome-shell/extensions/$uuid
