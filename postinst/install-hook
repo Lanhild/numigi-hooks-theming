@@ -1,0 +1,29 @@
+#!/bin/bash 
+# Fetch the source from the upstream repo and download it on the user machine 
+set -euo pipefail IFS=$'\n\t' 
+# Change to temporary directory 
+cd $(mktemp -d) 
+
+# Download user-theme extension
+echo 'Downloading user-theme extension...'
+wget https://extensions.gnome.org/extension-data/user-themegnome-shell-extensions.gcampax.github.com.v49.shell-extension.zip
+uuid=$(unzip -c user-themegnome-shell-extensions.gcampax.github.com.v49.shell-extension.zip metadata.json | grep uuid | cut -d \" -f4)
+unzip user-themegnome-shell-extensions.gcampax.github.com.v49.shell-extension.zip -d "~/.local/share/gnome-shell/extensions/$uuid"
+gnome-extensions enable "$uuid"
+echo 'Make sure to restart your session in order to apply the changes.'
+echo '-----------------------------'
+
+# Download icon theme
+echo 'Downloading icon theme...'
+wget https://github.com/vinceliuice/Fluent-icon-theme/archive/master.zip -O Fluent-icon-theme-master.zip
+unzip Fluent-icon-theme-master.zip
+cd Fluent-icon-theme-master
+./install.sh -n "Fluent-dark"
+echo '-----------------------------'
+
+# Apply icon theme
+echo 'Applying icon theme...'
+gsettings set org.gnome.desktop.interface icon-theme "Fluent-dark"
+
+# Update entries
+sudo apt update
